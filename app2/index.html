@@ -1,0 +1,59 @@
+<!doctype html>
+
+<html lang="en">
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+</script>
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Client/Server App</title>
+  <meta name="description" content="Client/Server App">
+  <meta name="author" content="Cas">
+</head>
+
+<body>
+<script>
+
+function _submit(){
+	var Name = $("#formID").find('input[name="Name"]').val();
+	var Age = $("#formID").find('input[name="Age"]').val();
+	var Data= {"name": Name, "age": Age};
+	var jsonData   = JSON.stringify(Data);
+	$.ajax({
+	  type: "POST",
+	  url: "http://localhost:5000/",
+	  data: jsonData,
+     cache: false,
+	  success: function(data){ 
+			var msg = data.message;
+			$("#display").after("<p>"+ msg + "</p>");
+		},
+	  error: function(){
+	     alert("fail");
+	  },
+	  dataType: "json",
+	  contentType : "application/json"
+	});
+}
+
+$(document).ready(function(ev){
+	$("#formID").submit(function(ev){
+		_submit();
+		ev.preventDefault();
+	});
+	ev.preventDefault();
+});
+
+</script>
+
+<form id="formID" method="POST" action="">
+	<input type="text" name="Name" placeholder="Enter Name" />
+	<input type="text" name="Age" placeholder="Enter Age" />
+	<input type="submit" value="Send" />
+</form>
+
+<p id="display"></p>
+
+</body>
+</html>
